@@ -56,12 +56,14 @@ a:hover { text-decoration: underline;}
 						while($row = mysql_fetch_assoc($res)) {
 							$fileext = fileext($row['url']);
 							if($fileext != 'gif') {
-								$row['url'] = 'phpThumb/phpThumb.php?src='.$row['url'].'&w=220';
+								$row['newurl'] = 'phpThumb/phpThumb.php?src='.$row['url'].'&w=220';
+							}else{
+								$row['newurl'] = $row['url'];
 							}
 							echo '
 								<div class="item">
 									<div class="pic">
-										<a href="'.$row['url'].'" target="_blank"><img src="'.$row['url'].'" /></a>
+										<a href="'.$row['url'].'" target="_blank"><img src="'.$row['newurl'].'" /></a>
 										<p class="desc">'.$row['desc'].'</p>
 										<div class="title">
 											<a href="#" class="img"></a>
