@@ -12,12 +12,21 @@ $rsp = json_decode($rsp);
 <head>
 <meta charset="utf-8">
 <style type="text/css">
-body { padding:0; margin:0; background:url(bg.jpg);}
+body { padding:0; margin:0; background:url(bg.jpg); font-size: 12px; color: #444;}
+a { font-size: 12px; text-decoration: none; color: #9E7E6B;}
+a:hover { text-decoration: underline;}
 #wrap { width: 1250px; margin: 0 auto;}
 #container { width: 1250px; margin: 0 auto;}
-.item { width: 210px; margin: 10px; float: left; border: 1px solid #ccc; padding: 5px; -moz-border-radius:5px 5px 5px 5px; -webkit-border-radius:5px 5px 5px 5px; -moz-box-shadow:0px 0px 5px rgba(0, 124, 0, 0.45); -webkit-box-shadow:0px 0px 5px rgba(0, 124, 0, 0.45);}
-.item:hover{ -moz-box-shadow:0px 0px 20px rgba(255, 0, 0, 0.45); -webkit-box-shadow:0px 0px 20px rgba(255, 0, 0, 0.45);}
-.pic img { width: 210px;}
+.item { background: #fff; width: 220px; margin: 10px; float: left; -moz-box-shadow:0px 1px 3px rgba(0, 0, 0, 0.3); -webkit-box-shadow:0px 1px 3px rgba(0, 0, 0, 0.3);}
+.item .desc { padding: 0 16px; margin: 10px 0; overflow: hidden; word-wrap: break-word;}
+.item .head { width: 50px; height: 50px; float: left;}
+.item .s { float: left; border-left: 1px solid #ccc; height: 50px;}
+.pic img { width: 220px;}
+.item .title { border-top: 1px solid #f2f2f2; padding: 0 16px;}
+.title .img { width: 34px; height: 34px; display: block; margin: 16px 0; float: left;}
+.title .text { margin-left: 51px; height: 51px; border-left: 1px solid #f2f2f2; padding: 15px 0 0 15px; line-height: 1.5;}
+.title .inner { height: 37px; overflow: hidden;}
+.clearfix { clear: both;}
 </style>
 </head>
 <body>
@@ -48,8 +57,24 @@ body { padding:0; margin:0; background:url(bg.jpg);}
 					$res = mysql_query($sql);
 					if($res) {
 						while($row = mysql_fetch_assoc($res)) {
-							echo '<div class="item"><div class="pic"><p>'.$row['title'].'</p><a href="'.$row['url'].'" target="_blank"><img src="'.$row['url'].'" /></a><p>'.$row['desc'].'</p></div></div>';
+							echo '
+								<div class="item">
+									<div class="pic">
+										<a href="'.$row['url'].'" target="_blank"><img src="'.$row['url'].'" /></a>
+										<p class="desc">'.$row['desc'].'</p>
+										<div class="title">
+											<a href="#" class="img"></a>
+											<div class="text">
+												<div class="inner">
+													<a href="#">'.$row['uid'].'</a>&nbsp;上传
+													<a title="回复" class="replyButton"></a>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>';
 						}
+						echo '<div class="clearfix"></div>';
 					}
 					mysql_close(connect());
 				}
