@@ -1,11 +1,11 @@
 <?php
-/**
- * 读取当前空间信息测试
- */
-include "config.php";
-$admin = $_GET['admin'] ? $_GET['admin'] : '';
-$rsp = $nanoyun->get_space_usage(SPACENAME);
-$rsp = json_decode($rsp);
+	/**
+	 * 读取当前空间信息测试
+	 */
+	include "config.php";
+	$admin = $_GET['admin'] ? $_GET['admin'] : '';
+	$rsp = $nanoyun->get_space_usage(SPACENAME);
+	$rsp = json_decode($rsp);
 ?>
 <!DOCTYPE HTML>
 <html>
@@ -22,11 +22,13 @@ a:hover { text-decoration: underline;}
 .item .head { width: 50px; height: 50px; float: left;}
 .item .s { float: left; border-left: 1px solid #ccc; height: 50px;}
 .pic img { width: 220px;}
-.item .title { border-top: 1px solid #f2f2f2; padding: 0 16px;}
+.item .title { border-top: 1px solid #f2f2f2; padding: 0 16px; background: #fafafa;}
 .title .img { width: 34px; height: 34px; display: block; margin: 16px 0; float: left;}
 .title .text { margin-left: 51px; height: 51px; border-left: 1px solid #f2f2f2; padding: 15px 0 0 15px; line-height: 1.5;}
 .title .inner { height: 37px; overflow: hidden;}
 .clearfix { clear: both;}
+.replyButton { display: block; position: absolute; right: 0; bottom: 0; width: 26px; height: 16px; background: url(home_comment_act_icon.png) 0 0 no-repeat; cursor: pointer; -webkit-transition: opacity .2s linear; -webkit-transition-property: opacity,right,bottom; opacity: 0;}
+.replyButton:hover { background-position: 0 -20px; visibility: visible; opacity: 1;}
 </style>
 </head>
 <body>
@@ -45,11 +47,6 @@ a:hover { text-decoration: underline;}
 		</div>
 		<div id="container">
 			<?php
-				/* $list = $nanoyun->get_list(SPACENAME, 'image');
-				$lists = json_decode($list);
-				foreach($lists -> lists as $v) {
-					echo '<div class="item"><div class="pic"><img src="'.$v -> url.'" /><p>设置ajax请求的开关,如需动态加载、需要打开这个开关</p></div></div>';
-				} */
 				if(!connect()) {
 					$error = '数据库连接失败！';
 				}else{
@@ -57,17 +54,21 @@ a:hover { text-decoration: underline;}
 					$res = mysql_query($sql);
 					if($res) {
 						while($row = mysql_fetch_assoc($res)) {
+							$fileext = fileext($row['url']);
+							if($fileext != 'gif') {
+								$row['url'] = 'phpThumb/phpThumb.php?src='.$row['url'].'&w=220';
+							}
 							echo '
 								<div class="item">
 									<div class="pic">
-										<a href="'.$row['url'].'" target="_blank"><img src="phpThumb/phpThumb.php?src='.$row['url'].'&w=220" /></a>
+										<a href="'.$row['url'].'" target="_blank"><img src="'.$row['url'].'" /></a>
 										<p class="desc">'.$row['desc'].'</p>
 										<div class="title">
 											<a href="#" class="img"></a>
 											<div class="text">
 												<div class="inner">
 													<a href="#">'.$row['uid'].'</a>&nbsp;上传
-													<a title="回复" class="replyButton"></a>
+													<a title="删除" class="replyButton"></a>
 												</div>
 											</div>
 										</div>
@@ -84,7 +85,13 @@ a:hover { text-decoration: underline;}
 	<script src="jquery-1.10.2.min.js"></script>
 	<script src="jquery.masonry.min.js"></script>
 	<script type="text/javascript" src="ajaxfileupload.js"></script>
-	<script type="text/javascript">
+	<script>
+		$("#loading").ajaxStart(function() {
+			$(this).show();
+		}).ajaxComplete(function() {
+			$(this).hide();
+		});
+		
 		$(function() {
 			var $container = $('#container');
 			$container.imagesLoaded(function(){
@@ -95,26 +102,20 @@ a:hover { text-decoration: underline;}
 		})
 		
 		function ajaxFileUpload() {
-			$("#loading").ajaxStart(function() {
-				$(this).show();
-			}).ajaxComplete(function() {
-				$(this).hide();
-			});
 			var title = $('#title').val(),
 				desc = $('#desc').val();
 			$.ajaxFileUpload({
 				url:'doajaxfileupload.php',
 				secureuri:false,
 				fileElementId:'fileToUpload',
-				dataType: 'JSON',
+				dataType: 'json',
 				data:{name:'logan', id:'id', title: title, desc: desc},
-				success: function (data, status) {
+				success: function(data, status) {
 					if(typeof(data.error) != 'undefined') {
 						if(data.error != '') {
 							alert(data.error);
 						}else{
 							alert(data.msg);
-							window.location = '/nano';
 						}
 					}
 				},
