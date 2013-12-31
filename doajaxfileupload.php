@@ -4,6 +4,7 @@
 	
 	$path = date('Ymd', time());
 	
+	$width = 220;
 	$error = "";
 	$msg = "";
 	$fileElementName = 'fileToUpload';
@@ -51,6 +52,7 @@
 		//$uploadfile = $uploaddir."/".$rnd_filename.".".$fileext;
 		//放到tmp物理目录下的临时文件
 		$tmp_file = uniqid().".".$fileext;
+		$thumb_file = uniqid()."_$width.".$fileext;
 		$msg .= " File Name: " . $_FILES[$fileElementName]['name'] . ", ";
 		$msg .= " File Size: " . @filesize($_FILES[$fileElementName]['tmp_name']);
 		$msg .= " File Type: " . $fileext;
@@ -60,17 +62,15 @@
 		$rsp = $nanoyun->get_list(SPACENAME, $uploaddir);
 		$dir = json_decode($rsp);
 		if(!($dir -> lists -> $path)) {
-			$rsp = $nanoyun->make_dir(SPACENAME, $uploaddir.'/'.$path);
+			$nanoyun->make_dir(SPACENAME, $uploaddir.'/'.$path);
 		}
-		$filehandle = fopen($_FILES[$fileElementName]['tmp_name'], 'rb');
+		
 		$filename = $uploaddir.'/'.$path.'/'.$tmp_file;//指定在云存储中的写入位置
-		$res = $nanoyun->write_file(SPACENAME, $filename, $filehandle);
-		$res = json_decode($res);
-		fclose($filehandle);
+		$result = saveToNano($_FILES[$fileElementName]['tmp_name'], $filename);
 		if(!connect()) {
 			$error = '数据库连接失败！';
 		}else{
-			if($res -> success) {
+			if($result) {
 				$url = 'http://other.52b25d4165d52.d01.nanoyun.com/'.$filename;
 				$now = date('Y-m-d H:i:s', time());
 				$sql = "insert into nano_pic(title, `desc`, url, uid, add_time, isshow) values('{$_POST['title']}', '{$_POST['desc']}', '{$url}', 0, '{$now}', 'yes')";

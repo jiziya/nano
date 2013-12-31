@@ -3,7 +3,7 @@
  * 读取当前空间信息测试
  */
 include "config.php";
-
+$admin = $_GET['admin'] ? $_GET['admin'] : '';
 $rsp = $nanoyun->get_space_usage(SPACENAME);
 $rsp = json_decode($rsp);
 ?>
@@ -60,7 +60,7 @@ a:hover { text-decoration: underline;}
 							echo '
 								<div class="item">
 									<div class="pic">
-										<a href="'.$row['url'].'" target="_blank"><img src="'.$row['url'].'" /></a>
+										<a href="'.$row['url'].'" target="_blank"><img src="phpThumb/phpThumb.php?src='.$row['url'].'&w=220" /></a>
 										<p class="desc">'.$row['desc'].'</p>
 										<div class="title">
 											<a href="#" class="img"></a>

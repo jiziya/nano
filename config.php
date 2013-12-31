@@ -29,38 +29,40 @@
 	 *	图片裁剪
 	 *
 	 */
-	function imageCut($src_img, $width) {
-		$dst_w = 300;
-		$dst_h = 200;
+	/* function imageCut($src_img, $width = 220) {
 		list($src_w, $src_h) = getimagesize($src_img);  // 获取原图尺寸
-		$dst_scale = $dst_h / $dst_w; //目标图像长宽比
-		$src_scale = $src_h / $src_w; // 原图长宽比
+		$dst_scale = $src_scale = $src_h / $src_w; // 原图长宽比
+		
+		$w = intval($src_w);
+		$h = intval($dst_scale*$w);
+		$x = 0;
+		$y = ($src_h - $h)/3;
 
-		if($src_scale>=$dst_scale) {  
-			// 过高
-			$w = intval($src_w);
-			$h = intval($dst_scale*$w);
-			$x = 0;
-			$y = ($src_h - $h)/3;
-		}else{ 
-		// 过宽
-			$h = intval($src_h);
-			$w = intval($h/$dst_scale);
-			$x = ($src_w - $w)/2;
-			$y = 0;
-		}
 		// 剪裁
 		$source=imagecreatefromjpeg($src_img);
 		$croped=imagecreatetruecolor($w, $h);
 		imagecopy($croped,$source,0,0,$x,$y,$src_w,$src_h);
 		// 缩放
-		$scale = $dst_w/$w;
-		$target = imagecreatetruecolor($dst_w, $dst_h);
+		$scale = $width/$w;
+		$target = imagecreatetruecolor($width, $src_h * $dst_scale);
 		$final_w = intval($w*$scale);
 		$final_h = intval($h*$scale);
 		imagecopysampled($target,$croped,0,0,0,0,$final_w,$final_h,$w,$h);
 		// 保存
-		$timestamp = time();
-		imagejpeg($target, "$timestamp.jpg");
+		//$timestamp = time();
+		$file = explode('.', $src_img);
+		$path = $file[0].'_'.$width.$file[1];
+		imagejpeg($target, $path);
 		imagedestroy($target);
+		return $path;
+	} */
+	
+	//保存图片到nano
+	function saveToNano($source, $target) {
+		$filehandle = fopen($source, 'rb');
+		global $nanoyun;
+		$res = $nanoyun->write_file(SPACENAME, $target, $filehandle);
+		$res = json_decode($res);
+		fclose($filehandle);
+		return $res -> success;
 	}
