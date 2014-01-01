@@ -36,7 +36,7 @@
 		.title .text { margin-left: 51px; height: 51px; border-left: 1px solid #f2f2f2; padding: 15px 0 0 15px; line-height: 1.5;}
 		.title .inner { height: 37px; overflow: hidden;}
 		.clearfix { clear: both;}
-		.replyButton { display: block; position: absolute; right: 0; bottom: 0; width: 26px; height: 16px; background: url(home_comment_act_icon.png) 0 0 no-repeat; cursor: pointer; -webkit-transition: opacity .2s linear; -webkit-transition-property: opacity,right,bottom; opacity: 0;}
+		.replyButton { display: block; position: absolute; right: 0; bottom: 0; width: 26px; height: 16px; background: url(images/home_comment_act_icon.png) 0 0 no-repeat; cursor: pointer; -webkit-transition: opacity .2s linear; -webkit-transition-property: opacity,right,bottom; opacity: 0;}
 		.replyButton:hover { background-position: 0 -20px; visibility: visible; opacity: 1;}
 		.del { opacity: 0.5; -webkit-transition: opacity .2s linear; -webkit-transition-property: opacity,right,bottom;}
 	</style>
