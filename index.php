@@ -24,9 +24,10 @@
 		body { padding:0; margin:0; background:url(images/bg.jpg); font-size: 12px; color: #444;}
 		a { font-size: 12px; text-decoration: none; color: #9E7E6B;}
 		a:hover { text-decoration: underline;}
+		img { border: 0;}
 		#wrap { width: 1250px; margin: 0 auto;}
 		#container { width: 1250px; margin: 0 auto;}
-		.item { background: #fff; width: 220px; margin: 10px; float: left; -moz-box-shadow:0px 1px 3px rgba(0, 0, 0, 0.3); -webkit-box-shadow:0px 1px 3px rgba(0, 0, 0, 0.3);}
+		.item { background: #fff; width: 220px; margin: 10px; float: left; box-shadow:0px 1px 3px rgba(0, 0, 0, 0.3);}
 		.item .desc { padding: 0 16px; margin: 10px 0; overflow: hidden; word-wrap: break-word;}
 		.item .head { width: 50px; height: 50px; float: left;}
 		.item .s { float: left; border-left: 1px solid #ccc; height: 50px;}
