@@ -6,14 +6,22 @@
 	$admin = $_GET['admin'] ? $_GET['admin'] : '';
 	$rsp = $nanoyun->get_space_usage(SPACENAME);
 	$rsp = json_decode($rsp);
+	if($admin == 'other' && $_GET['del']) {
+		if(!connect()) {
+			$error = '数据库连接失败！';
+		}else{
+			$sql = "update nano_pic set isshow = 'no' where id = {$_GET['del']}";
+			$res = mysql_query($sql);
+		}
+	}
 ?>
 <!DOCTYPE HTML>
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>22：34 —— 新年快乐！</title>
+	<title>22：34 - 新年快乐！</title>
 	<style type="text/css">
-		body { padding:0; margin:0; background:url(bg.jpg); font-size: 12px; color: #444;}
+		body { padding:0; margin:0; background:url(images/bg.jpg); font-size: 12px; color: #444;}
 		a { font-size: 12px; text-decoration: none; color: #9E7E6B;}
 		a:hover { text-decoration: underline;}
 		#wrap { width: 1250px; margin: 0 auto;}
@@ -30,6 +38,7 @@
 		.clearfix { clear: both;}
 		.replyButton { display: block; position: absolute; right: 0; bottom: 0; width: 26px; height: 16px; background: url(home_comment_act_icon.png) 0 0 no-repeat; cursor: pointer; -webkit-transition: opacity .2s linear; -webkit-transition-property: opacity,right,bottom; opacity: 0;}
 		.replyButton:hover { background-position: 0 -20px; visibility: visible; opacity: 1;}
+		.del { opacity: 0.5; -webkit-transition: opacity .2s linear; -webkit-transition-property: opacity,right,bottom;}
 	</style>
 </head>
 <body>
@@ -42,7 +51,7 @@
 					简介：<input type="text" name="desc" id="desc">
 					<input id="fileToUpload" type="file" size="45" name="fileToUpload" class="input">
 					<button class="button" id="buttonUpload" onclick="return ajaxFileUpload();">Upload</button>
-					<img id="loading" src="loading.gif" style="display:none;">
+					<img id="loading" src="images/loading.gif" style="display:none;">
 				</form>
 			</p>
 		</div>
@@ -71,7 +80,7 @@
 											<div class="text">
 												<div class="inner">
 													<a href="#">'.$row['uid'].'</a>&nbsp;上传
-													<a title="删除" class="replyButton"></a>
+													<a title="删除" class="replyButton" _id="'.$row['id'].'"></a>
 												</div>
 											</div>
 										</div>
@@ -85,14 +94,14 @@
 			?>
 		</div>
 	</div>
-	<script src="jquery-1.10.2.min.js"></script>
-	<script src="jquery.masonry.min.js"></script>
-	<script type="text/javascript" src="ajaxfileupload.js"></script>
+	<script src="js/jquery-1.10.2.min.js"></script>
+	<script src="js/jquery.masonry.min.js"></script>
+	<script type="text/javascript" src="js/ajaxfileupload.js"></script>
 	<script>
-		$("#loading").ajaxStart(function() {
-			$(this).show();
+		$(document).ajaxStart(function() {
+			$("#loading").show();
 		}).ajaxComplete(function() {
-			$(this).hide();
+			$("#loading").hide();
 		});
 		
 		$(function() {
@@ -101,6 +110,23 @@
 				$container.masonry({
 					itemSelector : '.item'
 				});
+			});
+			
+			$('.replyButton').on('click', function() {
+				var rule = '<?php echo $admin ?>';
+				if(rule == 'other') {
+					var del = $(this);
+					var _id = $(this).attr('_id');
+					$.ajax({
+						url: '?del=' + _id,
+						type: 'get',
+						success: function(e) {
+							del.parentsUntil('.item').addClass('del');
+						}
+					});
+				}else{
+					alert('对不起，您不是管理员！');
+				}
 			});
 		})
 		
@@ -119,10 +145,11 @@
 							alert(data.error);
 						}else{
 							alert(data.msg);
+							window.location = '/nano';
 						}
 					}
 				},
-				error: function (data, status, e) {
+				error: function(data, status, e) {
 					alert(e);
 				}
 			})
