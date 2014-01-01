@@ -10,26 +10,27 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-<meta charset="utf-8">
-<style type="text/css">
-body { padding:0; margin:0; background:url(bg.jpg); font-size: 12px; color: #444;}
-a { font-size: 12px; text-decoration: none; color: #9E7E6B;}
-a:hover { text-decoration: underline;}
-#wrap { width: 1250px; margin: 0 auto;}
-#container { width: 1250px; margin: 0 auto;}
-.item { background: #fff; width: 220px; margin: 10px; float: left; -moz-box-shadow:0px 1px 3px rgba(0, 0, 0, 0.3); -webkit-box-shadow:0px 1px 3px rgba(0, 0, 0, 0.3);}
-.item .desc { padding: 0 16px; margin: 10px 0; overflow: hidden; word-wrap: break-word;}
-.item .head { width: 50px; height: 50px; float: left;}
-.item .s { float: left; border-left: 1px solid #ccc; height: 50px;}
-.pic img { width: 220px;}
-.item .title { border-top: 1px solid #f2f2f2; padding: 0 16px; background: #fafafa;}
-.title .img { width: 34px; height: 34px; display: block; margin: 16px 0; float: left;}
-.title .text { margin-left: 51px; height: 51px; border-left: 1px solid #f2f2f2; padding: 15px 0 0 15px; line-height: 1.5;}
-.title .inner { height: 37px; overflow: hidden;}
-.clearfix { clear: both;}
-.replyButton { display: block; position: absolute; right: 0; bottom: 0; width: 26px; height: 16px; background: url(home_comment_act_icon.png) 0 0 no-repeat; cursor: pointer; -webkit-transition: opacity .2s linear; -webkit-transition-property: opacity,right,bottom; opacity: 0;}
-.replyButton:hover { background-position: 0 -20px; visibility: visible; opacity: 1;}
-</style>
+	<meta charset="utf-8">
+	<title>22：34 —— 新年快乐！</title>
+	<style type="text/css">
+		body { padding:0; margin:0; background:url(bg.jpg); font-size: 12px; color: #444;}
+		a { font-size: 12px; text-decoration: none; color: #9E7E6B;}
+		a:hover { text-decoration: underline;}
+		#wrap { width: 1250px; margin: 0 auto;}
+		#container { width: 1250px; margin: 0 auto;}
+		.item { background: #fff; width: 220px; margin: 10px; float: left; -moz-box-shadow:0px 1px 3px rgba(0, 0, 0, 0.3); -webkit-box-shadow:0px 1px 3px rgba(0, 0, 0, 0.3);}
+		.item .desc { padding: 0 16px; margin: 10px 0; overflow: hidden; word-wrap: break-word;}
+		.item .head { width: 50px; height: 50px; float: left;}
+		.item .s { float: left; border-left: 1px solid #ccc; height: 50px;}
+		.pic img { width: 220px;}
+		.item .title { border-top: 1px solid #f2f2f2; padding: 0 16px; background: #fafafa;}
+		.title .img { width: 34px; height: 34px; display: block; margin: 16px 0; float: left;}
+		.title .text { margin-left: 51px; height: 51px; border-left: 1px solid #f2f2f2; padding: 15px 0 0 15px; line-height: 1.5;}
+		.title .inner { height: 37px; overflow: hidden;}
+		.clearfix { clear: both;}
+		.replyButton { display: block; position: absolute; right: 0; bottom: 0; width: 26px; height: 16px; background: url(home_comment_act_icon.png) 0 0 no-repeat; cursor: pointer; -webkit-transition: opacity .2s linear; -webkit-transition-property: opacity,right,bottom; opacity: 0;}
+		.replyButton:hover { background-position: 0 -20px; visibility: visible; opacity: 1;}
+	</style>
 </head>
 <body>
 	<div id="wrap">
