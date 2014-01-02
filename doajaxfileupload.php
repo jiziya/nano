@@ -11,7 +11,7 @@
 	$uploaddir = 'image';	//设定上传路径
 	$fileext = fileext($_FILES[$fileElementName]['name']); 	//取得文件护展名
 	$_MAX_IMAGE_FILE_SIZE = 1024 * 4096;  //设定上传文件允许最大值4M
-	$_IMAGE_FILE_EXT = array('jpg','gif','png','jpeg','swf','zip');	//读取允许上传类型
+	$_IMAGE_FILE_EXT = array('jpg','gif','png','jpeg');	//读取允许上传类型
 
 	if(!empty($_FILES[$fileElementName]['error'])) {
 		switch($_FILES[$fileElementName]['error']) {
@@ -52,7 +52,6 @@
 		//$uploadfile = $uploaddir."/".$rnd_filename.".".$fileext;
 		//放到tmp物理目录下的临时文件
 		$tmp_file = uniqid().".".$fileext;
-		$thumb_file = uniqid()."_$width.".$fileext;
 		$msg .= " File Name: " . $_FILES[$fileElementName]['name'] . ", ";
 		$msg .= " File Size: " . @filesize($_FILES[$fileElementName]['tmp_name']);
 		$msg .= " File Type: " . $fileext;
