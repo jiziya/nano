@@ -61,7 +61,7 @@
 				if(!connect()) {
 					$error = '数据库连接失败！';
 				}else{
-					$sql = "select * from nano_pic where isshow = 'yes' order by add_time desc";
+					$sql = "select p.id, p.title, p.desc, p.url, p.uid, p.add_time, p.isshow, u.id, u.name from nano_pic p left join nano_user u on u.id = p.uid where p.isshow = 'yes' order by p.add_time desc";
 					$res = mysql_query($sql);
 					if($res) {
 						while($row = mysql_fetch_assoc($res)) {
@@ -74,13 +74,13 @@
 							echo '
 								<div class="item">
 									<div class="pic">
-										<a href="'.$row['url'].'" target="_blank"><img src="'.$row['newurl'].'" /></a>
+										<a href="'.$row['url'].'" target="_blank"><img src="'.$row['newurl'].'" title="'.$row['desc'].'" /></a>
 										<p class="desc">'.$row['desc'].'</p>
 										<div class="title">
 											<a href="#" class="img"></a>
 											<div class="text">
 												<div class="inner">
-													<a href="#">'.$row['uid'].'</a>&nbsp;上传
+													<a href="#">'.$row['name'].'</a>&nbsp;上传
 													<a title="删除" class="replyButton" _id="'.$row['id'].'"></a>
 												</div>
 											</div>
@@ -93,6 +93,9 @@
 					mysql_close(connect());
 				}
 			?>
+		</div>
+		<div class="footer">
+			
 		</div>
 	</div>
 	<script src="js/jquery-1.10.2.min.js"></script>

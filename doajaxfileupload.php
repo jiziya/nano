@@ -73,7 +73,7 @@
 			if($result) {
 				$url = 'http://other.52b25d4165d52.d01.nanoyun.com/'.$filename;
 				$now = date('Y-m-d H:i:s', time());
-				$sql = "insert into nano_pic(title, `desc`, url, uid, add_time, isshow) values('{$_POST['title']}', '{$_POST['desc']}', '{$url}', 0, '{$now}', 'yes')";
+				$sql = "insert into nano_pic(title, `desc`, url, uid, add_time, isshow) values('{$_POST['title']}', '{$_POST['desc']}', '{$url}', 1, '{$now}', 'yes')";
 				if(mysql_query($sql)) {
 					$msg = '上传成功';
 				}else{
