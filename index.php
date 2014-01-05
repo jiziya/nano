@@ -105,7 +105,7 @@
 										<a href="'.$row['url'].'" target="_blank"><img src="'.$row['newurl'].'" title="'.$row['desc'].'" /></a>
 										<p class="desc">'.$row['desc'].'</p>
 										<div class="title">
-											<a href="#" class="img"><img src="phpThumb/phpThumb.php?src='.$row['headpic'].'&w=34&h=34" /></a>
+											<a href="#" class="img"><img src="'.$row['headpic'].'!c34x34.jpg" /></a>
 											<div class="text">
 												<div class="inner">
 													<a href="#">'.$row['name'].'</a>&nbsp;上传
