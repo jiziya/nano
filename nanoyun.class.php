@@ -86,8 +86,8 @@ class Nanoyun{
                 curl_setopt($req_conn, CURLOPT_URL, $url);
                 $_headers = array('Expect:');
                 if(!is_null($filehandle)){
-                    if(is_resource($filehandle)){
-                        // echo '是文件';
+					if(is_resource($filehandle)){
+						// echo '是文件';
                         fseek($filehandle, 0, SEEK_END);
                         $length = ftell($filehandle);
                         fseek($filehandle, 0);

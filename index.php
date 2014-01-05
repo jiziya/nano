@@ -91,7 +91,11 @@
 						while($row = mysql_fetch_assoc($res)) {
 							$fileext = fileext($row['url']);
 							if($fileext != 'gif') {
-								$row['newurl'] = 'phpThumb/phpThumb.php?src='.$row['url'].'&w=220';
+								//$row['newurl'] = 'phpThumb/phpThumb.php?src='.$row['url'].'&w=220';
+								list($width, $height, $type, $attr) = getimagesize($row['url']);
+								$bili = round(220 / $width, 2);
+								$height = floor($height * $bili);
+								$row['newurl'] = $row['url'].'!c220x'.$height.'.jpg';
 							}else{
 								$row['newurl'] = $row['url'];
 							}
