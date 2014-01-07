@@ -85,7 +85,14 @@
 				if(!$link) {
 					$error = '数据库连接失败！';
 				}else{
-					$sql = "select p.id pid, p.title, p.desc, p.url, p.uid, p.add_time, p.isshow, u.id, u.name, u.headpic from nano_pic p left join nano_user u on u.id = p.uid where p.isshow = 'yes' order by p.add_time desc";
+					$page = intval(trim($_GET['page'])) ? intval(trim($_GET['page'])) : 1;
+					$sql = "select count(1) from nano_pic where isshow = 'yes'";
+					$re = mysql_query($sql);
+					$count = mysql_fetch_row($re);
+					$pageSize = 20;
+					$pageCount = intval(ceil($count[0] / $pageSize));
+					$limit = strval(($page - 1) * $pageSize).",".strval($pageSize);
+					$sql = "select p.id pid, p.title, p.desc, p.url, p.uid, p.add_time, p.isshow, u.id, u.name, u.headpic from nano_pic p left join nano_user u on u.id = p.uid where p.isshow = 'yes' order by p.add_time desc limit $limit";
 					$res = mysql_query($sql);
 					if($res) {
 						while($row = mysql_fetch_assoc($res)) {
