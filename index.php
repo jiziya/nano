@@ -36,7 +36,7 @@
 		#wrap { width: 1250px; margin: 0 auto;}
 		
 		/*图片容器和图片*/
-		#container { width: 1250px; margin: 0 auto;}
+		#container { margin: 0 auto;}
 		.item { background: #fff; width: 220px; margin: 10px; float: left; box-shadow:0px 1px 3px rgba(0, 0, 0, 0.3);}
 		.item .desc { padding: 0 16px; margin: 10px 0; overflow: hidden; word-wrap: break-word;}
 		.item .head { width: 50px; height: 50px; float: left;}
@@ -64,77 +64,9 @@
 		/*尾部*/
 		#footer { text-align: center; border-top: 1px solid #ccc; border-radius: 3px; margin-top: 50px; padding-top: 15px; height: 50px;}
 	</style>
-</head>
-<body>
-	<div id="wrap">
-		<div id="header">
-			<p><?php echo $rsp -> space -> name ?>已使用<?php echo round(($rsp -> space -> size)/1024/1024, 2) ?>M空间</p>
-			<p>
-				<form name="form" action="" method="POST" enctype="multipart/form-data">
-					标题：<input type="text" name="name" id="title">
-					简介：<input type="text" name="desc" id="desc">
-					<input id="fileToUpload" type="file" size="45" name="fileToUpload" class="input">
-					<button class="button" id="buttonUpload" onclick="return ajaxFileUpload();">Upload</button>
-					<img id="loading" src="images/loading.gif" style="display:none;">
-				</form>
-			</p>
-		</div>
-		<div id="container">
-			<?php
-				$link = connect();
-				if(!$link) {
-					$error = '数据库连接失败！';
-				}else{
-					$page = intval(trim($_GET['page'])) ? intval(trim($_GET['page'])) : 1;
-					$sql = "select count(1) from nano_pic where isshow = 'yes'";
-					$re = mysql_query($sql);
-					$count = mysql_fetch_row($re);
-					$pageSize = 20;
-					$pageCount = intval(ceil($count[0] / $pageSize));
-					$limit = strval(($page - 1) * $pageSize).",".strval($pageSize);
-					$sql = "select p.id pid, p.title, p.desc, p.url, p.uid, p.add_time, p.isshow, u.id, u.name, u.headpic from nano_pic p left join nano_user u on u.id = p.uid where p.isshow = 'yes' order by p.add_time desc limit $limit";
-					$res = mysql_query($sql);
-					if($res) {
-						while($row = mysql_fetch_assoc($res)) {
-							$fileext = fileext($row['url']);
-							if($fileext != 'gif') {
-								//$row['newurl'] = 'phpThumb/phpThumb.php?src='.$row['url'].'&w=220';
-								list($width, $height, $type, $attr) = getimagesize($row['url']);
-								$bili = round(220 / $width, 2);
-								$height = floor($height * $bili);
-								$row['newurl'] = $row['url'].'!c220x'.$height.'.jpg';
-							}else{
-								$row['newurl'] = $row['url'];
-							}
-							echo '
-								<div class="item">
-									<div class="pic">
-										<a href="'.$row['url'].'" target="_blank"><img src="'.$row['newurl'].'" title="'.$row['desc'].'" /></a>
-										<p class="desc">'.$row['desc'].'</p>
-										<div class="title">
-											<a href="#" class="img"><img src="'.$row['headpic'].'!c34x34.jpg" /></a>
-											<div class="text">
-												<div class="inner">
-													<a href="#">'.$row['name'].'</a>&nbsp;上传
-													<a title="删除" class="replyButton" _id="'.$row['pid'].'"></a>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>';
-						}
-						echo '<div class="clearfix"></div>';
-					}
-					@mysql_close($link);
-				}
-			?>
-		</div>
-		<div id="footer">
-			Copyright 2014 Fnzoo.com
-		</div>
-	</div>
 	<script src="js/jquery-1.10.2.min.js"></script>
 	<script src="js/jquery.masonry.min.js"></script>
+	<script src="js/jquery.infinitescroll.min.js"></script>
 	<script type="text/javascript" src="js/ajaxfileupload.js"></script>
 	<script>
 		$(document).ajaxStart(function() {
@@ -143,11 +75,30 @@
 			$("#loading").hide();
 		});
 		
+		
+		
 		$(function() {
 			var $container = $('#container');
 			$container.imagesLoaded(function(){
 				$container.masonry({
-					itemSelector : '.item'
+					itemSelector : '.item',
+					columnWidth: 240,
+					animationOptions: {
+						duration: 400
+					}
+				});
+			});
+			$container.infinitescroll({
+				navSelector: "#navigation",
+				nextSelector: "#navigation a",
+				itemSelector: ".item",
+				debug: true,
+				animate: true
+			}, function(newElements) {
+				var $newElems = $(newElements).css({opacity: 0});
+				$newElems.imagesLoaded(function() {
+					$newElems.animate({opacity: 1});
+					$container.masonry('appended', $newElems, true); 
 				});
 			});
 			
@@ -195,5 +146,76 @@
 			return false;
 		}
 	</script>
+</head>
+<body>
+	<div id="wrap">
+		<div id="header">
+			<p><?php echo $rsp -> space -> name ?>已使用<?php echo round(($rsp -> space -> size)/1024/1024, 2) ?>M空间</p>
+			<p>
+				<form name="form" action="" method="POST" enctype="multipart/form-data">
+					标题：<input type="text" name="name" id="title">
+					简介：<input type="text" name="desc" id="desc">
+					<input id="fileToUpload" type="file" size="45" name="fileToUpload" class="input">
+					<button class="button" id="buttonUpload" onclick="return ajaxFileUpload();">Upload</button>
+					<img id="loading" src="images/loading.gif" style="display:none;">
+				</form>
+			</p>
+		</div>
+		<div id="container">
+			<?php
+				$link = connect();
+				if(!$link) {
+					$error = '数据库连接失败！';
+				}else{
+					$page = intval(trim($_GET['page'])) ? intval(trim($_GET['page'])) : 1;
+					$sql = "select count(1) from nano_pic where isshow = 'yes'";
+					$re = mysql_query($sql);
+					$count = mysql_fetch_row($re);
+					$pageSize = 20;
+					$pageCount = intval(ceil($count[0] / $pageSize));
+					$limit = strval(($page - 1) * $pageSize).",".strval($pageSize);
+					$sql = "select p.id pid, p.title, p.desc, p.url, p.uid, p.add_time, p.isshow, u.id, u.name, u.headpic from nano_pic p left join nano_user u on u.id = p.uid where p.isshow = 'yes' order by p.add_time desc limit $limit";
+					$res = mysql_query($sql);
+					if($res) {
+						while($row = mysql_fetch_assoc($res)) {
+							$fileext = fileext($row['url']);
+							if($fileext != 'gif') {
+								$row['newurl'] = 'phpThumb/phpThumb.php?src='.$row['url'].'&w=220';
+								/* $bili = round(220 / $row['width'], 2);
+								$height = ceil($row['height'] * $bili);
+								$row['newurl'] = $row['url'].'!c220x'.$row['height'].'.jpg'; */
+							}else{
+								$row['newurl'] = $row['url'];
+							}
+							echo '
+								<div class="item">
+									<div class="pic">
+										<a href="'.$row['url'].'" target="_blank"><img src="'.$row['newurl'].'" title="'.$row['desc'].'" /></a>
+										<p class="desc">'.$row['desc'].'</p>
+										<div class="title">
+											<a href="#" class="img"><img src="'.$row['headpic'].'!c34x34.jpg" /></a>
+											<div class="text">
+												<div class="inner">
+													<a href="#">'.$row['name'].'</a>&nbsp;上传
+													<a title="删除" class="replyButton" _id="'.$row['pid'].'"></a>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>';
+						}
+						echo '<div class="clearfix"></div>';
+					}
+					@mysql_close($link);
+				}
+			?>
+		</div>
+		<div class="loading"><img src="images/loading.gif"><span>正在加载...</span></div>
+		<div id="navigation"><a href="index.php?page=1"></a></div>
+		<div id="footer">
+			Copyright 2014 Fnzoo.com
+		</div>
+	</div>
+
 </body>
 </html>

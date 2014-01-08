@@ -1,20 +1,13 @@
 <?php
 	include "config.php";
+	
 	//抓取图片
 	ini_set('memory_limit', '250M');
 	set_time_limit(0);
-	/* for($page=0; $page<3; $page++) {
-		$url = 'http://yousei-raws.org/news?page='.$page;
-		$ch = curl_init();
-		$timeout = 5;
-		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-		$data = curl_exec($ch);
-		curl_close($ch);
-		preg_match_all('/<h1>/', $data);
-	} */
 	
+	/**
+	 * 抓取yousei-raws站所有文章中的大图，保存到服务器
+	 */
 	/* for($page=0; $page<47; $page++) {
 		$url = 'http://yousei-raws.org/news?page='.$page;
 		$ch = curl_init();
@@ -48,6 +41,32 @@
 		echo '第'.$page.'页添加完成<br />';
 	} */
 	
+	//版本2
+	for($page=0; $page<47; $page++) {
+		$url = 'http://yousei-raws.org/news?page='.$page;
+		$html = file_get_html($url);
+		$title = $html -> find('h1');
+		$img = $html -> find('img');
+		$time = $html -> find('.views-field-changed .field-content');
+		$data = array();
+		for($i=0; $i<count($title); $i++) {
+			$data[$i]['title'] = $title[$i] -> plaintext;
+			$data[$i]['img'] = $img[$i] -> src;
+			$data[$i]['time'] = $time[$i] -> plaintext;
+		}
+		$link = connect();
+		if(!$link) {
+			$error = '数据库连接失败！';
+		}else{
+			foreach($data as $k => $v) {
+				$sql = "insert into pic(title, time, img) values('{$v['title']}', '{$v['time']}', '{$v['img']}')";
+				mysql_query($sql);
+			}
+		}
+		echo '第'.$page.'页添加完成<br />';
+	}
+	
+	//抓取到的图片存入nano云及服务器数据库添加记录
 	$link = connect();
 	if(!$link) {
 		$error = '数据库连接失败！';

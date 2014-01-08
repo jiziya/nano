@@ -4,7 +4,6 @@
 	
 	$path = date('Ymd', time());
 	
-	$width = 220;
 	$error = "";
 	$msg = "";
 	$fileElementName = 'fileToUpload';
@@ -12,7 +11,6 @@
 	$fileext = fileext($_FILES[$fileElementName]['name']); 	//取得文件护展名
 	$_MAX_IMAGE_FILE_SIZE = 1024 * 4096;  //设定上传文件允许最大值4M
 	$_IMAGE_FILE_EXT = array('jpg','gif','png','jpeg');	//读取允许上传类型
-
 	if(!empty($_FILES[$fileElementName]['error'])) {
 		switch($_FILES[$fileElementName]['error']) {
 			case '1':
@@ -48,6 +46,7 @@
 	}elseif(@filesize($_FILES[$fileElementName]['tmp_name']) > $_MAX_IMAGE_FILE_SIZE) {
 		$error = "单个文件大小超过限制.";
 	}else{
+		list($width, $height, $type, $attr) = getimagesize($_FILES[$fileElementName]['tmp_name']);
 		//文件名称以及路径名称		ctd_map.jpg
 		//$uploadfile = $uploaddir."/".$rnd_filename.".".$fileext;
 		//放到tmp物理目录下的临时文件
@@ -70,9 +69,10 @@
 			$error = '数据库连接失败！';
 		}else{
 			if($result) {
+				
 				$url = 'http://other.52b25d4165d52.d01.nanoyun.com/'.$filename;
 				$now = date('Y-m-d H:i:s', time());
-				$sql = "insert into nano_pic(title, `desc`, url, uid, `type`, add_time, story_time, isshow) values('{$_POST['title']}', '{$_POST['desc']}', '{$url}', 1, 'self', '{$now}', '{$now}', 'yes')";
+				$sql = "insert into nano_pic(title, `desc`, url, uid, `type`, width, height, mediatype, add_time, story_time, isshow) values('{$_POST['title']}', '{$_POST['desc']}', '{$url}', 1, 'self', {$width}, {$height}, '{$fileext}', '{$now}', '{$now}', 'yes')";
 				if(mysql_query($sql)) {
 					$msg = '上传成功';
 				}else{
