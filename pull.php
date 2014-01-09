@@ -95,7 +95,7 @@
 				@file_put_contents('img/'.$tmp_file, $content);
 			curl_close($ch);
 			
-
+			list($width, $height, $type, $attr) = getimagesize($tmp_file);
 			$rsp = $nanoyun->get_list(SPACENAME, $uploaddir);
 			$dir = json_decode($rsp);
 			if(!($dir -> lists -> $path)) {
@@ -109,7 +109,7 @@
 				if($result) {
 					$url = 'http://other.52b25d4165d52.d01.nanoyun.com/'.$filename;
 					$now = date('Y-m-d H:i:s', time());
-					$sql = "insert into nano_pic(title, `desc`, url, uid, `type`, add_time, story_time, isshow) values('{$row['title']}', '{$row['title']}', '{$url}', 2, 'comic', '{$now}', '{$row['time']}', 'yes')";
+					$sql = "insert into nano_pic(title, `desc`, url, uid, `type`, width, height, mediatype, add_time, story_time, isshow) values('{$row['title']}', '{$row['title']}', '{$url}', 2, 'comic', {$width}, {$height}, '{$type}', '{$now}', '{$row['time']}', 'yes')";
 					if(mysql_query($sql)) {
 						$msg = '上传成功';
 					}else{
